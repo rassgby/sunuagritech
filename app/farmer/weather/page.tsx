@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, JSX } from 'react';
-import Nav from '@/app/components/farmer/nav';
+import Nav from '@/components/farmer/nav';
 import Link from 'next/link';
 import {
     Menu, X, Home, Cloud, Layers, LogOut,

@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { Heart, Menu, X, Home,  Cloud, Layers, LogOut } from 'lucide-react';
 import { getProjects } from '@/app/services/projects';
 import { useRouter } from 'next/navigation';
-import { ProjectWithUser } from '@/app/types/project';
+import { ProjectWithUser } from '@/types/project';
 import ProjectDetailsModal from '@/app/farmer/detail/page';
-import Nav from '@/app/components/farmer/nav';
+import Nav from '@/components/farmer/nav';
 
 export default function InvestorProjects() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
