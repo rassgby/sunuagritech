@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect, JSX } from 'react';
-import Nav from '@/components/farmer/nav';
 import Link from 'next/link';
 import {
     Menu, X, Home, Cloud, Layers, LogOut,
@@ -144,7 +143,87 @@ export default function FarmerWeather() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <Nav />
+            {/* Mobile sidebar */}
+            <div className={`fixed inset-0 flex z-40 md:hidden ${sidebarOpen ? "" : "hidden"}`}>
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)}></div>
+                <div className="relative flex-1 flex flex-col max-w-xs w-full bg-green-800">
+                    <div className="absolute top-0 right-0 -mr-12 pt-2">
+                        <button
+                            className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                            onClick={() => setSidebarOpen(false)}
+                        >
+                            <span className="sr-only">Fermer la sidebar</span>
+                            <X className="h-6 w-6 text-white" />
+                        </button>
+                    </div>
+                    <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
+                        <div className="flex-shrink-0 flex items-center px-4">
+                            <span className="text-white font-bold text-xl">SunuAgri</span>
+                        </div>
+                        <nav className="mt-5 px-2 space-y-1">
+                            {/* Sidebar Navigation Items */}
+                            <Link href="/farmer" className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                                <Home className="mr-4 h-6 w-6" />
+                                Tableau de bord
+                            </Link>
+                            <Link href="/farmer/projet" className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                                <Layers className="mr-4 h-6 w-6" />
+                                Mes projets
+                            </Link>
+                            <Link href="/farmer/weather" className="bg-green-900 text-white group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                                <Cloud className="mr-4 h-6 w-6" />
+                                Météo
+                            </Link>
+                        </nav>
+                    </div>
+                    <div className="flex-shrink-0 flex border-t border-green-700 p-4">
+                        <Link href="/" className="flex items-center">
+                            <div className="ml-3">
+                                <p className="text-base font-medium text-white">{userName}</p>
+                                <p className="text-sm font-medium text-green-200 group-hover:text-white">
+                                    Se déconnecter
+                                </p>
+                            </div>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+
+            {/* Static sidebar for desktop */}
+            <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
+                <div className="flex-1 flex flex-col min-h-0 bg-green-800">
+                    <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+                        <div className="flex items-center flex-shrink-0 px-4">
+                            <span className="text-white font-bold text-xl">SunuAgri</span>
+                        </div>
+                        <nav className="mt-5 flex-1 px-2 space-y-1">
+                            <Link href="/farmer" className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                                <Home className="mr-3 h-6 w-6" />
+                                Tableau de bord
+                            </Link>
+                            <Link href="/farmer/projet" className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                                <Layers className="mr-3 h-6 w-6" />
+                                Mes projets
+                            </Link>
+                            <Link href="/farmer/weather" className="bg-green-900 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                                <Cloud className="mr-3 h-6 w-6" />
+                                Météo
+                            </Link>
+                        </nav>
+                    </div>
+                    <div className="flex-shrink-0 flex border-t border-green-700 p-4">
+                        <Link href="/" className="flex items-center group">
+                            <div className="ml-3">
+                                <p className="text-sm font-medium text-white">Amadou Korka Diallo</p>
+                                <div className="flex items-center text-sm font-medium text-green-200 group-hover:text-white">
+                                    <LogOut className="mr-1 h-4 w-4" />
+                                    Se déconnecter
+                                </div>
+                            </div>
+                        </Link>
+                    </div>
+                </div>
+            </div>
 
             <div className="md:pl-64 flex flex-col flex-1">
                 <div className="sticky top-0 z-10 md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3 bg-white">
@@ -455,4 +534,3 @@ export default function FarmerWeather() {
         </div>
     );
 }
-
