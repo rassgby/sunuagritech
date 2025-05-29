@@ -251,15 +251,15 @@ export default function FarmersDashboard() {
     return (
         <div className="flex h-screen bg-gray-100">
             <Head>
-                <title>Agriculteurs - AgriTech Sénégal</title>
-                <meta name="description" content="Découvrez et soutenez les agriculteurs sur AgriTech Sénégal" />
+                <title>Agriculteurs - SunuAgri Sénégal</title>
+                <meta name="description" content="Découvrez et soutenez les agriculteurs sur SunuAgri Sénégal" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
             {/* Sidebar */}
             <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} fixed inset-y-0 left-0 z-50 w-64 bg-green-800 text-white transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:block`}>
                 <div className="flex items-center justify-between p-4 border-b border-green-700">
-                    <h1 className="text-xl font-bold">AgriTech</h1>
+                    <h1 className="text-xl font-bold">SunuAgri</h1>
                     <button onClick={() => setSidebarOpen(false)} className="md:hidden">
                         <X size={24} />
                     </button>
@@ -335,7 +335,7 @@ export default function FarmersDashboard() {
                             </button>
                             <h2 className="text-xl font-semibold text-gray-800">Agriculteurs</h2>
                         </div>
-                        <div className="flex items-center space-x-4">
+                        {/* <div className="flex items-center space-x-4">
                             <div className="relative">
                                 <input
                                     type="search"
@@ -344,7 +344,7 @@ export default function FarmersDashboard() {
                                 />
                                 <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </header>
 

@@ -228,7 +228,7 @@ export default function InvestorProjects() {
               <h2 className="text-xl font-semibold text-gray-800">Projets à financer</h2>
             </div>
             <div className="flex items-center space-x-3">
-              <div className="relative">
+              {/* <div className="relative">
                 <input
                   type="search"
                   placeholder="Rechercher..."
@@ -237,7 +237,7 @@ export default function InvestorProjects() {
                   className="py-2 pl-10 pr-4 rounded-full text-black/75 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent w-full md:w-64"
                 />
                 <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
-              </div>
+              </div> */}
               <button
                 onClick={() => setFilterOpen(!filterOpen)}
                 className="p-2 rounded-full hover:bg-gray-100 relative"
@@ -413,11 +413,11 @@ export default function InvestorProjects() {
                           >
                             Voir détails
                           </button>
-                        <button
+                        <Link href='/investisseur/investir/projet'
                           className="block flex-1 text-center bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium text-sm transition-colors"
                         >
                           Investir
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>

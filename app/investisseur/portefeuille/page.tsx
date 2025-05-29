@@ -226,7 +226,7 @@ export default function InvestorPortfolio() {
             {/* Sidebar */}
             <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} fixed inset-y-0 left-0 z-50 w-64 bg-green-800 text-white transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:block`}>
                 <div className="flex items-center justify-between p-4 border-b border-green-700">
-                    <h1 className="text-xl font-bold">AgriTech</h1>
+                    <h1 className="text-xl font-bold">SunuAgri</h1>
                     <button onClick={() => setSidebarOpen(false)} className="md:hidden">
                         <X size={24} />
                     </button>
@@ -302,7 +302,7 @@ export default function InvestorPortfolio() {
                             </button>
                             <h2 className="text-xl font-semibold text-gray-800">Mon portefeuille</h2>
                         </div>
-                        <div className="flex items-center space-x-4">
+                        {/* <div className="flex items-center space-x-4">
                             <button className="flex items-center text-green-600 hover:text-green-700">
                                 <Download size={18} className="mr-1" />
                                 <span className="text-sm">Rapport PDF</span>
@@ -315,7 +315,7 @@ export default function InvestorPortfolio() {
                                 />
                                 <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </header>
 
@@ -896,7 +896,7 @@ export default function InvestorPortfolio() {
                         </div> */}
 
                         {/* <div className="mt-8 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
-                            <p>&copy; 2025 AgriTech. Tous droits réservés.</p>
+                            <p>&copy; 2025 SunuAgri. Tous droits réservés.</p>
                         </div> */}
                     </footer>
                 </main>
