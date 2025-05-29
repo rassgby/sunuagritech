@@ -75,6 +75,7 @@ export default function FarmerWeather() {
     const [selectedLocation, setSelectedLocation] = useState("Thiès");
     const [selectedTab, setSelectedTab] = useState("forecast");
     const [userName, setUserName] = useState("Aucun utilisateur");
+    const [currentUser, setCurrentUser] = useState({ name: "Utilisateur inconnu" });
 
     useEffect(() => {
         const fetchWeatherData = async () => {
@@ -109,9 +110,16 @@ export default function FarmerWeather() {
                 console.error("Error fetching weather data:", error);
             }
         };
+        // Récupérer le nom de l'utilisateur connecté depuis le localStorage
+    const fetchCurrentUser = () => {
+      const userName = localStorage.getItem('userName');
+      if (userName) {
+        setCurrentUser({ name: userName });
+      }
+    };
 
         fetchWeatherData();
-        fetchUserName();
+        fetchCurrentUser();
     }, [selectedLocation]);
 
     // Fonction pour simuler un rafraîchissement des données météo
@@ -126,12 +134,6 @@ export default function FarmerWeather() {
         }, 1000);
     };
 
-    const fetchUserName = () => {
-      const storedUserName = localStorage.getItem('userName');
-      if (storedUserName) {
-        setUserName(storedUserName);
-      }
-    };
     // Fonction pour changer la localisation
     const changeLocation = (location: string) => {
         setSelectedLocation(location);
@@ -179,7 +181,7 @@ export default function FarmerWeather() {
                     <div className="flex-shrink-0 flex border-t border-green-700 p-4">
                         <Link href="/" className="flex items-center">
                             <div className="ml-3">
-                                <p className="text-base font-medium text-white">{userName}</p>
+                                <p className="text-base font-medium text-white">{currentUser.name}</p>
                                 <p className="text-sm font-medium text-green-200 group-hover:text-white">
                                     Se déconnecter
                                 </p>
@@ -214,7 +216,7 @@ export default function FarmerWeather() {
                     <div className="flex-shrink-0 flex border-t border-green-700 p-4">
                         <Link href="/" className="flex items-center group">
                             <div className="ml-3">
-                                <p className="text-sm font-medium text-white">Amadou Korka Diallo</p>
+                                <p className="text-sm font-medium text-white">{currentUser.name}</p>
                                 <div className="flex items-center text-sm font-medium text-green-200 group-hover:text-white">
                                     <LogOut className="mr-1 h-4 w-4" />
                                     Se déconnecter

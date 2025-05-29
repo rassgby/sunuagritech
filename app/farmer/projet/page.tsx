@@ -135,11 +135,11 @@ export default function InvestorProjects() {
               <span className="text-white font-bold text-xl">SunuAgri</span>
             </div>
             <nav className="mt-5 flex-1 px-2 space-y-1">
-              <Link href="/farmer" className="bg-green-900 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+              <Link href="/farmer" className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
                 <Home className="mr-3 h-6 w-6" />
                 Tableau de bord
               </Link>
-              <Link href="/farmer/projet" className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+              <Link href="/farmer/projet" className="bg-green-900 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
                 <Layers className="mr-3 h-6 w-6" />
                 Mes projets
               </Link>
