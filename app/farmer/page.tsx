@@ -1,39 +1,71 @@
-'use client';
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+"use client";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
-    Menu, X, Home, TrendingUp, Cloud, Layers,
-    ShoppingBag, MessageSquare, LogOut,
-    Sun, CloudRain, Wind,  AlertTriangle, ChevronRight, RefreshCw, Filter,
-    ChevronDown,
-    Plus,
-    Thermometer
-} from 'lucide-react';
-import { LineChart, XAxis, YAxis, Tooltip, Line, CartesianGrid, ResponsiveContainer } from 'recharts';
-import { getProjects } from '@/app/services/projects';
-import { getFullWeather } from '@/app/services/weatherService';
-import { useRouter } from 'next/navigation';
-import { ProjectWithUser } from '@/types/project';
+  Menu,
+  X,
+  Home,
+  TrendingUp,
+  Cloud,
+  Layers,
+  ShoppingBag,
+  MessageSquare,
+  LogOut,
+  Sun,
+  CloudRain,
+  Wind,
+  AlertTriangle,
+  ChevronRight,
+  RefreshCw,
+  Filter,
+  ChevronDown,
+  Plus,
+  Thermometer,
+} from "lucide-react";
+import {
+  LineChart,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Line,
+  CartesianGrid,
+  ResponsiveContainer,
+} from "recharts";
+import { getProjects } from "@/app/services/projects";
+import { getFullWeather } from "@/app/services/weatherService";
+import { useRouter } from "next/navigation";
+import { ProjectWithUser } from "@/types/project";
 
 // Composant pour afficher les détails d'un projet
-const ProjectDetails = ({ project, onClose }: { project: ProjectWithUser; onClose: () => void }) => {
-  const [amount, setAmount] = useState('');
+const ProjectDetails = ({
+  project,
+  onClose,
+}: {
+  project: ProjectWithUser;
+  onClose: () => void;
+}) => {
+  const [amount, setAmount] = useState("");
 
   const investInProject = () => {
     if (!amount || isNaN(parseInt(amount))) return;
 
     const investmentAmount = parseInt(amount);
     const newFunding = project.currentFunding + investmentAmount;
-    const newProgress = Math.min(100, Math.round((newFunding / project.fundingGoal) * 100));
+    const newProgress = Math.min(
+      100,
+      Math.round((newFunding / project.fundingGoal) * 100)
+    );
     const newStatus = newProgress === 100 ? "financé" : "en cours";
     const newDaysLeft = newProgress === 100 ? 0 : project.daysLeft;
 
     const newNotification = {
       id: Date.now(),
-      text: `Vous avez investi ${investmentAmount.toLocaleString()} FCFA dans votre projet "${project.projectName}"`,
+      text: `Vous avez investi ${investmentAmount.toLocaleString()} FCFA dans votre projet "${
+        project.projectName
+      }"`,
       time: "À l'instant",
       type: "investment",
-      read: false
+      read: false,
     };
     // setNotifications([newNotification, ...notifications]);
 
@@ -44,13 +76,20 @@ const ProjectDetails = ({ project, onClose }: { project: ProjectWithUser; onClos
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex justify-center items-center p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
         <div className="p-5 border-b border-gray-200 flex justify-between items-center">
-          <h3 className="text-lg font-medium text-gray-900">Détails du projet</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-500">
+          <h3 className="text-lg font-medium text-gray-900">
+            Détails du projet
+          </h3>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-500"
+          >
             <X className="h-5 w-5" />
           </button>
         </div>
         <div className="p-5">
-          <h2 className="text-xl font-bold text-gray-900">{project.projectName}</h2>
+          <h2 className="text-xl font-bold text-gray-900">
+            {project.projectName}
+          </h2>
           <p className="mt-2 text-gray-600">{project.description}</p>
 
           <div className="mt-4">
@@ -71,15 +110,21 @@ const ProjectDetails = ({ project, onClose }: { project: ProjectWithUser; onClos
           <div className="mt-4 grid grid-cols-2 gap-4">
             <div>
               <div className="text-sm text-gray-500">Objectif</div>
-              <div className="text-lg font-semibold">{project.fundingGoal.toLocaleString()} FCFA</div>
+              <div className="text-lg font-semibold">
+                {project.fundingGoal.toLocaleString()} FCFA
+              </div>
             </div>
             <div>
               <div className="text-sm text-gray-500">Financé</div>
-              <div className="text-lg font-semibold">{project.currentFunding.toLocaleString()} FCFA</div>
+              <div className="text-lg font-semibold">
+                {project.currentFunding.toLocaleString()} FCFA
+              </div>
             </div>
             <div>
               <div className="text-sm text-gray-500">Statut</div>
-              <div className="text-lg font-semibold capitalize">{project.status}</div>
+              <div className="text-lg font-semibold capitalize">
+                {project.status}
+              </div>
             </div>
             <div>
               <div className="text-sm text-gray-500">Jours restants</div>
@@ -125,8 +170,15 @@ const ProjectDetails = ({ project, onClose }: { project: ProjectWithUser; onClos
 };
 
 // Composant pour afficher la condition météo
-const WeatherIcon = ({ condition, size = 'md' }: { condition: string; size?: 'sm' | 'md' | 'lg' }) => {
-  const sizeClass = size === 'sm' ? 'h-5 w-5' : size === 'lg' ? 'h-12 w-12' : 'h-6 w-6';
+const WeatherIcon = ({
+  condition,
+  size = "md",
+}: {
+  condition: string;
+  size?: "sm" | "md" | "lg";
+}) => {
+  const sizeClass =
+    size === "sm" ? "h-5 w-5" : size === "lg" ? "h-12 w-12" : "h-6 w-6";
 
   if (condition === "Clear") {
     return <Sun className={`${sizeClass} text-yellow-500`} />;
@@ -170,7 +222,9 @@ export default function FarmerDashboard() {
     status: string;
     img: string;
   };
-  const [marketplaceItems, setMarketplaceItems] = useState<MarketplaceItem[]>([]);
+  const [marketplaceItems, setMarketplaceItems] = useState<MarketplaceItem[]>(
+    []
+  );
   type Notification = {
     id: number;
     text: string;
@@ -179,14 +233,19 @@ export default function FarmerDashboard() {
     read: boolean;
   };
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [weatherView, setWeatherView] = useState('forecast'); 
-  const [marketplaceView, setMarketplaceView] = useState('all');
+  const [weatherView, setWeatherView] = useState("forecast");
+  const [marketplaceView, setMarketplaceView] = useState("all");
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<ProjectWithUser | null>(null);
-  const [newProduct, setNewProduct] = useState({ name: '', quantity: '', price: '' });
+  const [selectedProject, setSelectedProject] =
+    useState<ProjectWithUser | null>(null);
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    quantity: "",
+    price: "",
+  });
   const [showNewProductForm, setShowNewProductForm] = useState(false);
   const [unreadCount] = useState(0);
-  const [activityFilter, setActivityFilter] = useState('all');
+  const [activityFilter, setActivityFilter] = useState("all");
   const [showWeatherAlert, setShowWeatherAlert] = useState(true);
   const [selectedLocation, setSelectedLocation] = useState("Dakar");
   const [userName, setUserName] = useState("Aucun utilisateur");
@@ -197,22 +256,26 @@ export default function FarmerDashboard() {
       try {
         const result = await getProjects();
         if (result) {
-          setProjects(result.map((project: any) => ({
-            id: project.id,
-            projectName: project.project_name,
-            description: project.description,
-            fundingGoal: project.budget,
-            currentFunding: project.currentFunding || 0,
-            progress: project.progress || 0,
-            daysLeft: project.daysLeft || 0,
-            status: project.status || "en cours",
-            user: project.user ? {
-              name: project.user.name || "Unknown",
-              phoneNumber: project.user.phoneNumber || ""
-            } : null,
-            location: project.location || "",
-            projectType: project.project_type,
-          })));
+          setProjects(
+            result.map((project: any) => ({
+              id: project.id,
+              projectName: project.project_name,
+              description: project.description,
+              fundingGoal: project.budget,
+              currentFunding: project.currentFunding || 0,
+              progress: project.progress || 0,
+              daysLeft: project.daysLeft || 0,
+              status: project.status || "en cours",
+              user: project.user
+                ? {
+                    name: project.user.name || "Unknown",
+                    phoneNumber: project.user.phoneNumber || "",
+                  }
+                : null,
+              location: project.location || "",
+              projectType: project.project_type,
+            }))
+          );
         } else {
           console.error("Error fetching projects: No data received");
         }
@@ -228,7 +291,7 @@ export default function FarmerDashboard() {
         setWeatherData({
           current: {
             temp: data.current.temperature ?? 0,
-            condition: data.current.description ?? '',
+            condition: data.current.description ?? "",
             windSpeed: data.current.windSpeed ?? 0,
             humidity: data.current.humidity ?? 0,
           },
@@ -242,7 +305,7 @@ export default function FarmerDashboard() {
 
     // Récupérer le nom de l'utilisateur connecté depuis le localStorage
     const fetchUserName = () => {
-      const storedUserName = localStorage.getItem('userName');
+      const storedUserName = localStorage.getItem("userName");
       if (storedUserName) {
         setUserName(storedUserName);
       }
@@ -260,43 +323,55 @@ export default function FarmerDashboard() {
       // Simuler une légère modification aléatoire de la température
       if (
         weatherData &&
-        typeof weatherData === 'object' &&
+        typeof weatherData === "object" &&
         !Array.isArray(weatherData)
       ) {
         if (
-          typeof weatherData === 'object' &&
+          typeof weatherData === "object" &&
           weatherData !== null &&
-          typeof weatherData.current === 'object' &&
+          typeof weatherData.current === "object" &&
           weatherData.current !== null
         ) {
-          const updatedWeather = { ...weatherData, current: { ...weatherData.current } };
-          updatedWeather.current.temp = Math.round((weatherData.current.temp + (Math.random() * 2 - 1)) * 10) / 10;
+          const updatedWeather = {
+            ...weatherData,
+            current: { ...weatherData.current },
+          };
+          updatedWeather.current.temp =
+            Math.round(
+              (weatherData.current.temp + (Math.random() * 2 - 1)) * 10
+            ) / 10;
           setWeatherData(updatedWeather);
         }
       }
 
       // Simuler un nouvel investissement
       if (Math.random() > 0.5) {
-        const randomProject = projects.find(p => p.status === "en cours");
+        const randomProject = projects.find((p) => p.status === "en cours");
         if (randomProject) {
           const investment = Math.round(Math.random() * 100000);
           const newFunding = randomProject.currentFunding + investment;
-          const newProgress = Math.round((newFunding / randomProject.fundingGoal) * 100);
+          const newProgress = Math.round(
+            (newFunding / randomProject.fundingGoal) * 100
+          );
 
           // Mettre à jour le projet
-          setProjects(projects.map(p =>
-            p.id === randomProject.id
-              ? {...p, currentFunding: newFunding, progress: newProgress}
-              : p
-          ));
+          setProjects(
+            projects.map((p) =>
+              p.id === randomProject.id
+                ? { ...p, currentFunding: newFunding, progress: newProgress }
+                : p
+            )
+          );
 
           // Ajouter une notification
           const newNotification = {
             id: Date.now(),
-            text: `Nouvel investissement de ${investment.toLocaleString()} FCFA pour votre projet "${randomProject.projectName}"`,
+            text: `Nouvel investissement de ${investment.toLocaleString()} FCFA pour votre projet "${
+              randomProject.projectName
+            }"`,
             time: "À l'instant",
             type: "investment",
-            read: false
+            read: false,
           };
           setNotifications([newNotification, ...notifications]);
         }
@@ -308,7 +383,7 @@ export default function FarmerDashboard() {
 
   // Fonction pour marquer toutes les notifications comme lues
   const markAllAsRead = () => {
-    setNotifications(notifications.map(n => ({...n, read: true})));
+    setNotifications(notifications.map((n) => ({ ...n, read: true })));
   };
 
   // Fonction pour ajouter un nouveau produit
@@ -321,19 +396,19 @@ export default function FarmerDashboard() {
       quantity: `${newProduct.quantity} kg`,
       price: parseInt(newProduct.price),
       status: "Disponible",
-      img: "/api/placeholder/64/64"
+      img: "/api/placeholder/64/64",
     };
 
     setMarketplaceItems([...marketplaceItems, product]);
-    setNewProduct({ name: '', quantity: '', price: '' });
+    setNewProduct({ name: "", quantity: "", price: "" });
     setShowNewProductForm(false);
   };
 
   // Fonction pour filtrer les produits du marché
-  const filteredMarketplaceItems = marketplaceItems.filter(item => {
-    if (marketplaceView === 'all') return true;
-    if (marketplaceView === 'available') return item.status === 'Disponible';
-    if (marketplaceView === 'reserved') return item.status === 'Réservé';
+  const filteredMarketplaceItems = marketplaceItems.filter((item) => {
+    if (marketplaceView === "all") return true;
+    if (marketplaceView === "available") return item.status === "Disponible";
+    if (marketplaceView === "reserved") return item.status === "Réservé";
     return true;
   });
 
@@ -341,30 +416,31 @@ export default function FarmerDashboard() {
   const activities = [
     {
       id: 1,
-      type: 'investment',
+      type: "investment",
       title: "Investissement reçu",
       date: "Il y a 2 heures",
-      description: "Votre projet 'Riziculture 2024' a reçu un nouvel investissement."
+      description:
+        "Votre projet 'Riziculture 2024' a reçu un nouvel investissement.",
     },
     {
       id: 2,
-      type: 'weather',
+      type: "weather",
       title: "Alerte météo",
       date: "Il y a 1 jour",
-      description: "Des pluies sont prévues jeudi."
+      description: "Des pluies sont prévues jeudi.",
     },
     {
       id: 3,
-      type: 'marketplace',
+      type: "marketplace",
       title: "Produit vendu",
       date: "Il y a 3 jours",
-      description: "Vous avez vendu 50 kg de maïs sur le marché."
-    }
+      description: "Vous avez vendu 50 kg de maïs sur le marché.",
+    },
   ];
 
   // Fonction pour filtrer les activités
-  const filteredActivities = activities.filter(activity => {
-    if (activityFilter === 'all') return true;
+  const filteredActivities = activities.filter((activity) => {
+    if (activityFilter === "all") return true;
     return activity.type === activityFilter;
   });
 
@@ -375,8 +451,15 @@ export default function FarmerDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile sidebar */}
-      <div className={`fixed inset-0 flex z-40 md:hidden ${sidebarOpen ? "" : "hidden"}`}>
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)}></div>
+      <div
+        className={`fixed inset-0 flex z-40 md:hidden ${
+          sidebarOpen ? "" : "hidden"
+        }`}
+      >
+        <div
+          className="fixed inset-0 bg-gray-600 bg-opacity-75"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
         <div className="relative flex-1 flex flex-col max-w-xs w-full bg-green-800">
           <div className="absolute top-0 right-0 -mr-12 pt-2">
             <button
@@ -393,19 +476,27 @@ export default function FarmerDashboard() {
             </div>
             <nav className="mt-5 px-2 space-y-1">
               {/* Sidebar Navigation Items */}
-              <Link href="/farmer" className="bg-green-900 text-white group flex items-center px-2 py-2 text-base font-medium rounded-md">
+              <Link
+                href="/farmer"
+                className="bg-green-900 text-white group flex items-center px-2 py-2 text-base font-medium rounded-md"
+              >
                 <Home className="mr-4 h-6 w-6" />
                 Tableau de bord
               </Link>
-              <Link href="/farmer/projet" className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+              <Link
+                href="/farmer/projet"
+                className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+              >
                 <Layers className="mr-4 h-6 w-6" />
                 Mes projets
               </Link>
-              <Link href="/farmer/weather" className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+              <Link
+                href="/farmer/weather"
+                className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+              >
                 <Cloud className="mr-4 h-6 w-6" />
                 Météo
               </Link>
-
             </nav>
           </div>
           <div className="flex-shrink-0 flex border-t border-green-700 p-4">
@@ -429,15 +520,24 @@ export default function FarmerDashboard() {
               <span className="text-white font-bold text-xl">SunuAgri</span>
             </div>
             <nav className="mt-5 flex-1 px-2 space-y-1">
-              <Link href="/farmer" className="bg-green-900 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+              <Link
+                href="/farmer"
+                className="bg-green-900 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+              >
                 <Home className="mr-3 h-6 w-6" />
                 Tableau de bord
               </Link>
-              <Link href="/farmer/projet" className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+              <Link
+                href="/farmer/projet"
+                className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+              >
                 <Layers className="mr-3 h-6 w-6" />
                 Mes projets
               </Link>
-              <Link href="/farmer/weather" className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+              <Link
+                href="/farmer/weather"
+                className="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+              >
                 <Cloud className="mr-3 h-6 w-6" />
                 Météo
               </Link>
@@ -473,14 +573,20 @@ export default function FarmerDashboard() {
           <div className="py-6">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-semibold text-gray-900">Tableau de bord</h1>
+                <h1 className="text-2xl font-semibold text-gray-900">
+                  Tableau de bord
+                </h1>
                 <div className="flex items-center space-x-4">
                   <button
                     onClick={refreshData}
                     className="p-1 rounded-full text-gray-500 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                     disabled={isRefreshing}
                   >
-                    <RefreshCw className={`h-6 w-6 ${isRefreshing ? 'animate-spin text-green-500' : ''}`} />
+                    <RefreshCw
+                      className={`h-6 w-6 ${
+                        isRefreshing ? "animate-spin text-green-500" : ""
+                      }`}
+                    />
                   </button>
 
                   <div className="relative">
@@ -489,8 +595,19 @@ export default function FarmerDashboard() {
                       className="p-1 rounded-full text-gray-500 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                     >
                       <span className="sr-only">Voir les notifications</span>
-                      <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                      <svg
+                        className="h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                        />
                       </svg>
                       {unreadCount > 0 && (
                         <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white"></span>
@@ -501,7 +618,9 @@ export default function FarmerDashboard() {
                     {notificationsOpen && (
                       <div className="origin-top-right absolute right-0 mt-2 w-80 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
                         <div className="px-4 py-2 border-b border-gray-200 flex justify-between items-center">
-                          <h3 className="text-sm font-medium text-gray-700">Notifications</h3>
+                          <h3 className="text-sm font-medium text-gray-700">
+                            Notifications
+                          </h3>
                           {unreadCount > 0 && (
                             <button
                               onClick={markAllAsRead}
@@ -513,13 +632,19 @@ export default function FarmerDashboard() {
                         </div>
                         <div className="max-h-64 overflow-y-auto">
                           {notifications.length > 0 ? (
-                            notifications.map(notification => (
+                            notifications.map((notification) => (
                               <div
                                 key={notification.id}
-                                className={`px-4 py-3 hover:bg-gray-50 border-b border-gray-100 ${!notification.read ? 'bg-green-50' : ''}`}
+                                className={`px-4 py-3 hover:bg-gray-50 border-b border-gray-100 ${
+                                  !notification.read ? "bg-green-50" : ""
+                                }`}
                               >
-                                <p className="text-sm text-gray-700">{notification.text}</p>
-                                <p className="text-xs text-gray-500 mt-1">{notification.time}</p>
+                                <p className="text-sm text-gray-700">
+                                  {notification.text}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1">
+                                  {notification.time}
+                                </p>
                               </div>
                             ))
                           ) : (
@@ -529,7 +654,10 @@ export default function FarmerDashboard() {
                           )}
                         </div>
                         <div className="px-4 py-2 border-t border-gray-200">
-                          <Link href="/dashboard/farmer/notifications" className="text-xs text-green-600 hover:text-green-800">
+                          <Link
+                            href="/dashboard/farmer/notifications"
+                            className="text-xs text-green-600 hover:text-green-800"
+                          >
                             Voir toutes les notifications
                           </Link>
                         </div>
@@ -550,13 +678,17 @@ export default function FarmerDashboard() {
                         <AlertTriangle className="h-5 w-5 text-yellow-400" />
                       </div>
                       <div className="ml-3">
-                        <h3 className="text-sm font-medium text-yellow-800">Alerte météo</h3>
+                        <h3 className="text-sm font-medium text-yellow-800">
+                          Alerte météo
+                        </h3>
                         <div className="mt-2 text-sm text-yellow-700">
                           <p>
-                            Des fortes pluies sont prévues jeudi, prenez les mesures nécessaires pour protéger vos cultures sensibles.
+                            Des fortes pluies sont prévues jeudi, prenez les
+                            mesures nécessaires pour protéger vos cultures
+                            sensibles.
                           </p>
                         </div>
-                        </div>
+                      </div>
                       <div className="ml-auto pl-3">
                         <div className="-mx-1.5 -my-1.5">
                           <button
@@ -583,10 +715,15 @@ export default function FarmerDashboard() {
                         </div>
                         <div className="ml-5 w-0 flex-1">
                           <dl>
-                            <dt className="text-sm font-medium text-gray-500 truncate">Projets financés</dt>
+                            <dt className="text-sm font-medium text-gray-500 truncate">
+                              Projets financés
+                            </dt>
                             <dd className="flex items-baseline">
                               <div className="text-2xl font-semibold text-gray-900">
-                                {projects.filter(p => p.status === "financé").length}
+                                {
+                                  projects.filter((p) => p.status === "financé")
+                                    .length
+                                }
                               </div>
                               <div className="ml-2 flex items-baseline text-sm font-semibold text-green-600">
                                 <span className="sr-only">Augmenté de</span>
@@ -607,7 +744,9 @@ export default function FarmerDashboard() {
                         </div>
                         <div className="ml-5 w-0 flex-1">
                           <dl>
-                            <dt className="text-sm font-medium text-gray-500 truncate">Produits sur le marché</dt>
+                            <dt className="text-sm font-medium text-gray-500 truncate">
+                              Produits sur le marché
+                            </dt>
                             <dd className="flex items-baseline">
                               <div className="text-2xl font-semibold text-gray-900">
                                 {marketplaceItems.length}
@@ -631,7 +770,9 @@ export default function FarmerDashboard() {
                         </div>
                         <div className="ml-5 w-0 flex-1">
                           <dl>
-                            <dt className="text-sm font-medium text-gray-500 truncate">Température actuelle</dt>
+                            <dt className="text-sm font-medium text-gray-500 truncate">
+                              Température actuelle
+                            </dt>
                             <dd className="flex items-baseline">
                               <div className="text-2xl font-semibold text-gray-900">
                                 {weatherData.current.temp}°C
@@ -650,7 +791,9 @@ export default function FarmerDashboard() {
                 {/* Mes projets */}
                 <div className="bg-white shadow rounded-lg mb-6">
                   <div className="px-4 py-5 border-b border-gray-200 sm:px-6 flex justify-between items-center">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">Mes projets</h3>
+                    <h3 className="text-lg leading-6 font-medium text-gray-900">
+                      Mes projets
+                    </h3>
                     <div className="flex items-center space-x-2">
                       <div className="relative">
                         <button
@@ -663,7 +806,11 @@ export default function FarmerDashboard() {
                           <ChevronDown className="ml-2 h-4 w-4" />
                         </button>
                         <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 hidden">
-                          <div className="py-1" role="menu" aria-orientation="vertical">
+                          <div
+                            className="py-1"
+                            role="menu"
+                            aria-orientation="vertical"
+                          >
                             <button
                               className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                               role="menuitem"
@@ -686,7 +833,10 @@ export default function FarmerDashboard() {
                         </div>
                       </div>
                       <Link href="/farmer/new-projet">
-                        <button type="button" className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <button
+                          type="button"
+                          className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                        >
                           <Plus className="-ml-0.5 mr-2 h-4 w-4" />
                           Nouveau projet
                         </button>
@@ -696,28 +846,50 @@ export default function FarmerDashboard() {
                   <div className="px-4 py-5 sm:p-6">
                     <div className="grid grid-cols-1 gap-5 sm:grid-cols-1 lg:grid-cols-2">
                       {projects.map((project) => (
-                        <div key={project.id} className="bg-white overflow-hidden shadow rounded-lg border">
+                        <div
+                          key={project.id}
+                          className="bg-white overflow-hidden shadow rounded-lg border"
+                        >
                           <div className="px-4 py-5 sm:px-6 flex items-center justify-between">
-                            <h3 className="text-lg leading-6 font-medium text-gray-900">{project.projectName}</h3>
-                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              project.status === "financé" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
-                            }`}>
-                              {project.status === "financé" ? "Financé" : `${project.daysLeft} jours restants`}
+                            <h3 className="text-lg leading-6 font-medium text-gray-900">
+                              {project.projectName}
+                            </h3>
+                            <span
+                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                project.status === "financé"
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-yellow-100 text-yellow-800"
+                              }`}
+                            >
+                              {project.status === "financé"
+                                ? "Financé"
+                                : `${project.daysLeft} jours restants`}
                             </span>
                           </div>
                           <div className="border-t border-gray-200 px-4 py-5 sm:p-6">
-                            <p className="text-sm text-gray-500 mb-4">{project.description}</p>
+                            <p className="text-sm text-gray-500 mb-4">
+                              {project.description}
+                            </p>
                             <div className="flex items-center justify-between text-sm mb-1">
                               <div className="text-gray-500">Progression</div>
-                              <div className="text-gray-900 font-medium">{project.progress}%</div>
+                              <div className="text-gray-900 font-medium">
+                                {project.progress}%
+                              </div>
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-2.5">
-                              <div className="bg-green-600 h-2.5 rounded-full" style={{ width: `${project.progress}%` }}></div>
+                              <div
+                                className="bg-green-600 h-2.5 rounded-full"
+                                style={{ width: `${project.progress}%` }}
+                              ></div>
                             </div>
                             <div className="mt-4 flex items-center justify-between">
                               <div>
-                                <span className="text-gray-500 text-sm">Objectif: </span>
-                                <span className="text-gray-900 font-medium">{project.fundingGoal} FCFA</span>
+                                <span className="text-gray-500 text-sm">
+                                  Objectif:{" "}
+                                </span>
+                                <span className="text-gray-900 font-medium">
+                                  {project.fundingGoal} FCFA
+                                </span>
                               </div>
                               <button
                                 onClick={() => setSelectedProject(project)}
@@ -738,25 +910,27 @@ export default function FarmerDashboard() {
                   {/* Météo */}
                   <div className="bg-white shadow rounded-lg">
                     <div className="px-4 py-5 border-b border-gray-200 sm:px-6 flex justify-between items-center">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900">Météo</h3>
+                      <h3 className="text-lg leading-6 font-medium text-gray-900">
+                        Météo
+                      </h3>
                       <div className="flex space-x-2">
                         <button
                           className={`px-3 py-1 text-sm font-medium rounded-md ${
-                            weatherView === 'forecast'
-                              ? 'bg-green-600 text-white'
-                              : 'border border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
+                            weatherView === "forecast"
+                              ? "bg-green-600 text-white"
+                              : "border border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
                           }`}
-                          onClick={() => setWeatherView('forecast')}
+                          onClick={() => setWeatherView("forecast")}
                         >
                           Prévisions
                         </button>
                         <button
                           className={`px-3 py-1 text-sm font-medium rounded-md ${
-                            weatherView === 'hourly'
-                              ? 'bg-green-600 text-white'
-                              : 'border border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
+                            weatherView === "hourly"
+                              ? "bg-green-600 text-white"
+                              : "border border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
                           }`}
-                          onClick={() => setWeatherView('hourly')}
+                          onClick={() => setWeatherView("hourly")}
                         >
                           Horaire
                         </button>
@@ -765,11 +939,18 @@ export default function FarmerDashboard() {
                     <div className="px-4 py-5 sm:p-6">
                       <div className="flex items-center mb-6">
                         <div className="flex items-center justify-center h-16 w-16 rounded-md bg-blue-50">
-                          <WeatherIcon condition={weatherData.current.condition} size="lg" />
+                          <WeatherIcon
+                            condition={weatherData.current.condition}
+                            size="lg"
+                          />
                         </div>
                         <div className="ml-5">
-                          <div className="text-3xl font-bold text-black/60">{weatherData.current.temp}°C</div>
-                          <div className="text-gray-500">{weatherData.current.condition}</div>
+                          <div className="text-3xl font-bold text-black/60">
+                            {weatherData.current.temp}°C
+                          </div>
+                          <div className="text-gray-500">
+                            {weatherData.current.condition}
+                          </div>
                         </div>
                         <div className="ml-auto">
                           <div className="flex items-center text-gray-500 mb-2">
@@ -778,20 +959,26 @@ export default function FarmerDashboard() {
                           </div>
                           <div className="flex items-center text-gray-500">
                             <Thermometer className="h-5 w-5 mr-1" />
-                            <span>{weatherData.current.humidity}% humidité</span>
+                            <span>
+                              {weatherData.current.humidity}% humidité
+                            </span>
                           </div>
                         </div>
                       </div>
 
-                      {weatherView === 'forecast' ? (
+                      {weatherView === "forecast" ? (
                         <div className="grid grid-cols-5 gap-2">
                           {weatherData.forecast.map((day, index) => (
                             <div key={index} className="text-center">
-                              <div className="text-gray-500 mb-2">{day.day}</div>
+                              <div className="text-gray-500 mb-2">
+                                {day.day}
+                              </div>
                               <div className="flex justify-center mb-1">
                                 <WeatherIcon condition={day.condition} />
                               </div>
-                              <div className="font-medium text-black/65">{day.maxTemp}°C</div>
+                              <div className="font-medium text-black/65">
+                                {day.maxTemp}°C
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -804,11 +991,31 @@ export default function FarmerDashboard() {
                             >
                               <CartesianGrid strokeDasharray="3 3" />
                               <XAxis dataKey="hour" />
-                              <YAxis yAxisId="left" orientation="left" stroke="#2563EB" />
-                              <YAxis yAxisId="right" orientation="right" stroke="#10B981" />
+                              <YAxis
+                                yAxisId="left"
+                                orientation="left"
+                                stroke="#2563EB"
+                              />
+                              <YAxis
+                                yAxisId="right"
+                                orientation="right"
+                                stroke="#10B981"
+                              />
                               <Tooltip />
-                              <Line yAxisId="left" type="monotone" dataKey="temp" stroke="#2563EB" name="Température (°C)" />
-                              <Line yAxisId="right" type="monotone" dataKey="humidity" stroke="#10B981" name="Humidité (%)" />
+                              <Line
+                                yAxisId="left"
+                                type="monotone"
+                                dataKey="temp"
+                                stroke="#2563EB"
+                                name="Température (°C)"
+                              />
+                              <Line
+                                yAxisId="right"
+                                type="monotone"
+                                dataKey="humidity"
+                                stroke="#10B981"
+                                name="Humidité (%)"
+                              />
                             </LineChart>
                           </ResponsiveContainer>
                         </div>
@@ -819,7 +1026,9 @@ export default function FarmerDashboard() {
                   {/* Activités récentes */}
                   <div className="bg-white shadow rounded-lg">
                     <div className="px-4 py-5 border-b border-gray-200 sm:px-6 flex justify-between items-center">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900">Activités récentes</h3>
+                      <h3 className="text-lg leading-6 font-medium text-gray-900">
+                        Activités récentes
+                      </h3>
                       <div className="relative">
                         <button
                           type="button"
@@ -830,30 +1039,34 @@ export default function FarmerDashboard() {
                           <ChevronDown className="ml-1 h-4 w-4" />
                         </button>
                         <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 hidden">
-                          <div className="py-1" role="menu" aria-orientation="vertical">
+                          <div
+                            className="py-1"
+                            role="menu"
+                            aria-orientation="vertical"
+                          >
                             <button
-                              onClick={() => setActivityFilter('all')}
+                              onClick={() => setActivityFilter("all")}
                               className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                               role="menuitem"
                             >
                               Toutes les activités
                             </button>
                             <button
-                              onClick={() => setActivityFilter('investment')}
+                              onClick={() => setActivityFilter("investment")}
                               className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                               role="menuitem"
                             >
                               Investissements
                             </button>
                             <button
-                              onClick={() => setActivityFilter('weather')}
+                              onClick={() => setActivityFilter("weather")}
                               className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                               role="menuitem"
                             >
                               Alertes météo
                             </button>
                             <button
-                              onClick={() => setActivityFilter('marketplace')}
+                              onClick={() => setActivityFilter("marketplace")}
                               className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                               role="menuitem"
                             >
@@ -870,19 +1083,36 @@ export default function FarmerDashboard() {
                             <li key={activity.id}>
                               <div className="relative pb-8">
                                 {index !== filteredActivities.length - 1 ? (
-                                  <span className="absolute top-5 left-5 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true" />
+                                  <span
+                                    className="absolute top-5 left-5 -ml-px h-full w-0.5 bg-gray-200"
+                                    aria-hidden="true"
+                                  />
                                 ) : null}
                                 <div className="relative flex items-start space-x-3">
                                   <div>
-                                    <div className={`relative p-2 rounded-full flex items-center justify-center ${
-                                      activity.type === 'investment' ? 'bg-green-100' :
-                                      activity.type === 'weather' ? 'bg-blue-100' :
-                                      activity.type === 'marketplace' ? 'bg-purple-100' : 'bg-yellow-100'
-                                    }`}>
-                                      {activity.type === 'investment' && <TrendingUp className="h-5 w-5 text-green-600" />}
-                                      {activity.type === 'weather' && <Cloud className="h-5 w-5 text-blue-600" />}
-                                      {activity.type === 'marketplace' && <ShoppingBag className="h-5 w-5 text-purple-600" />}
-                                      {activity.type === 'project' && <Layers className="h-5 w-5 text-yellow-600" />}
+                                    <div
+                                      className={`relative p-2 rounded-full flex items-center justify-center ${
+                                        activity.type === "investment"
+                                          ? "bg-green-100"
+                                          : activity.type === "weather"
+                                          ? "bg-blue-100"
+                                          : activity.type === "marketplace"
+                                          ? "bg-purple-100"
+                                          : "bg-yellow-100"
+                                      }`}
+                                    >
+                                      {activity.type === "investment" && (
+                                        <TrendingUp className="h-5 w-5 text-green-600" />
+                                      )}
+                                      {activity.type === "weather" && (
+                                        <Cloud className="h-5 w-5 text-blue-600" />
+                                      )}
+                                      {activity.type === "marketplace" && (
+                                        <ShoppingBag className="h-5 w-5 text-purple-600" />
+                                      )}
+                                      {activity.type === "project" && (
+                                        <Layers className="h-5 w-5 text-yellow-600" />
+                                      )}
                                     </div>
                                   </div>
                                   <div className="min-w-0 flex-1">
@@ -905,7 +1135,10 @@ export default function FarmerDashboard() {
                         </ul>
                       </div>
                       <div className="mt-6">
-                        <Link href="/dashboard/farmer/activities" className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        <Link
+                          href="/dashboard/farmer/activities"
+                          className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                        >
                           Voir toutes les activités
                         </Link>
                       </div>
@@ -915,55 +1148,70 @@ export default function FarmerDashboard() {
 
                 {/* Marché */}
                 <div className="bg-white shadow rounded-lg mt-6">
-                  <div className="px-4 py-5 border-b border-gray-200 sm:px-6 flex justify-between items-center">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">Marché</h3>
-                    <div className="flex items-center space-x-2">
-                      <div className="flex space-x-1">
+                  <div className="px-4 py-5 border-b border-gray-200 sm:px-6">
+                    <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                      <h3 className="text-lg leading-6 font-medium text-gray-900">
+                        Marché
+                      </h3>
+
+                      <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
+                        {/* Boutons de filtre */}
+                        <div className="flex space-x-1">
+                          <button
+                            className={`px-3 py-1 text-sm font-medium rounded-md ${
+                              marketplaceView === "all"
+                                ? "bg-green-600 text-white"
+                                : "border border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
+                            }`}
+                            onClick={() => setMarketplaceView("all")}
+                          >
+                            Tous
+                          </button>
+                          <button
+                            className={`px-3 py-1 text-sm font-medium rounded-md ${
+                              marketplaceView === "available"
+                                ? "bg-green-600 text-white"
+                                : "border border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
+                            }`}
+                            onClick={() => setMarketplaceView("available")}
+                          >
+                            Disponibles
+                          </button>
+                          <button
+                            className={`px-3 py-1 text-sm font-medium rounded-md ${
+                              marketplaceView === "reserved"
+                                ? "bg-green-600 text-white"
+                                : "border border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
+                            }`}
+                            onClick={() => setMarketplaceView("reserved")}
+                          >
+                            Réservés
+                          </button>
+                        </div>
+
+                        {/* Bouton Ajouter */}
                         <button
-                          className={`px-3 py-1 text-sm font-medium rounded-md ${
-                            marketplaceView === 'all'
-                              ? 'bg-green-600 text-white'
-                              : 'border border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
-                          }`}
-                          onClick={() => setMarketplaceView('all')}
+                          onClick={() =>
+                            setShowNewProductForm(!showNewProductForm)
+                          }
+                          className="w-full sm:w-auto inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                         >
-                          Tous
-                        </button>
-                        <button
-                          className={`px-3 py-1 text-sm font-medium rounded-md ${
-                            marketplaceView === 'available'
-                              ? 'bg-green-600 text-white'
-                              : 'border border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
-                          }`}
-                          onClick={() => setMarketplaceView('available')}
-                        >
-                          Disponibles
-                        </button>
-                        <button
-                          className={`px-3 py-1 text-sm font-medium rounded-md ${
-                            marketplaceView === 'reserved'
-                              ? 'bg-green-600 text-white'
-                              : 'border border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
-                          }`}
-                          onClick={() => setMarketplaceView('reserved')}
-                        >
-                          Réservés
+                          <Plus className="-ml-0.5 mr-2 h-4 w-4" />
+                          Ajouter un produit
                         </button>
                       </div>
-                      <button
-                        onClick={() => setShowNewProductForm(!showNewProductForm)}
-                        className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                      >
-                        <Plus className="-ml-0.5 mr-2 h-4 w-4" />
-                        Ajouter un produit
-                      </button>
                     </div>
                   </div>
+
+                  {/* Formulaire d'ajout */}
                   {showNewProductForm && (
                     <div className="px-4 py-3 bg-gray-50 sm:px-6">
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-6">
+                      <div className="space-y-4 sm:grid sm:grid-cols-6 sm:gap-4 sm:space-y-0">
                         <div className="sm:col-span-2">
-                          <label htmlFor="productName" className="block text-sm font-medium text-gray-700">
+                          <label
+                            htmlFor="productName"
+                            className="block text-sm font-medium text-gray-700"
+                          >
                             Nom du produit
                           </label>
                           <div className="mt-1">
@@ -972,13 +1220,22 @@ export default function FarmerDashboard() {
                               name="productName"
                               id="productName"
                               value={newProduct.name}
-                              onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
+                              onChange={(e) =>
+                                setNewProduct({
+                                  ...newProduct,
+                                  name: e.target.value,
+                                })
+                              }
                               className="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md"
                             />
                           </div>
                         </div>
+
                         <div className="sm:col-span-1">
-                          <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
+                          <label
+                            htmlFor="quantity"
+                            className="block text-sm font-medium text-gray-700"
+                          >
                             Quantité (kg)
                           </label>
                           <div className="mt-1">
@@ -987,13 +1244,22 @@ export default function FarmerDashboard() {
                               name="quantity"
                               id="quantity"
                               value={newProduct.quantity}
-                              onChange={(e) => setNewProduct({...newProduct, quantity: e.target.value})}
+                              onChange={(e) =>
+                                setNewProduct({
+                                  ...newProduct,
+                                  quantity: e.target.value,
+                                })
+                              }
                               className="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md"
                             />
                           </div>
                         </div>
+
                         <div className="sm:col-span-1">
-                          <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                          <label
+                            htmlFor="price"
+                            className="block text-sm font-medium text-gray-700"
+                          >
                             Prix (FCFA)
                           </label>
                           <div className="mt-1">
@@ -1002,23 +1268,29 @@ export default function FarmerDashboard() {
                               name="price"
                               id="price"
                               value={newProduct.price}
-                              onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
+                              onChange={(e) =>
+                                setNewProduct({
+                                  ...newProduct,
+                                  price: e.target.value,
+                                })
+                              }
                               className="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md"
                             />
                           </div>
                         </div>
-                        <div className="sm:col-span-2 flex items-end justify-end space-x-3">
+
+                        <div className="flex flex-col space-y-2 sm:col-span-2 sm:flex-row sm:items-end sm:justify-end sm:space-y-0 sm:space-x-3">
                           <button
                             type="button"
                             onClick={() => setShowNewProductForm(false)}
-                            className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                            className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                           >
                             Annuler
                           </button>
                           <button
                             type="button"
                             onClick={addNewProduct}
-                            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                            className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                           >
                             Ajouter
                           </button>
@@ -1026,23 +1298,75 @@ export default function FarmerDashboard() {
                       </div>
                     </div>
                   )}
-                  <div className="overflow-x-auto">
+
+                  {/* Tableau - Version mobile avec cards */}
+                  <div className="sm:hidden">
+                    <div className="px-4 py-3 divide-y divide-gray-200">
+                      {filteredMarketplaceItems.map((item) => (
+                        <div key={item.id} className="py-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 min-w-0">
+                              <div className="font-medium text-gray-900 truncate">
+                                {item.name}
+                              </div>
+                              <div className="text-sm text-gray-500 mt-1">
+                                {item.quantity} kg •{" "}
+                                {item.price.toLocaleString()} FCFA
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <span
+                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                  item.status === "Disponible"
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-yellow-100 text-yellow-800"
+                                }`}
+                              >
+                                {item.status}
+                              </span>
+                              <button className="text-green-600 hover:text-green-900 text-sm font-medium">
+                                Modifier
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Tableau - Version desktop */}
+                  <div className="hidden sm:block overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-300">
                       <thead className="bg-gray-50">
                         <tr>
-                          <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                          <th
+                            scope="col"
+                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                          >
                             Produit
                           </th>
-                          <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
                             Quantité
                           </th>
-                          <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
                             Prix
                           </th>
-                          <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
                             Statut
                           </th>
-                          <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                          <th
+                            scope="col"
+                            className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                          >
                             <span className="sr-only">Actions</span>
                           </th>
                         </tr>
@@ -1053,7 +1377,9 @@ export default function FarmerDashboard() {
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                               <div className="flex items-center">
                                 <div className="ml-4">
-                                  <div className="font-medium text-gray-900">{item.name}</div>
+                                  <div className="font-medium text-gray-900">
+                                    {item.name}
+                                  </div>
                                 </div>
                               </div>
                             </td>
@@ -1064,15 +1390,20 @@ export default function FarmerDashboard() {
                               {item.price.toLocaleString()} FCFA
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                item.status === "Disponible" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
-                              }`}>
+                              <span
+                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                  item.status === "Disponible"
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-yellow-100 text-yellow-800"
+                                }`}
+                              >
                                 {item.status}
                               </span>
                             </td>
                             <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                               <button className="text-green-600 hover:text-green-900">
-                                Modifier<span className="sr-only">, {item.name}</span>
+                                Modifier
+                                <span className="sr-only">, {item.name}</span>
                               </button>
                             </td>
                           </tr>
@@ -1080,8 +1411,13 @@ export default function FarmerDashboard() {
                       </tbody>
                     </table>
                   </div>
-                  <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                    <Link href="/dashboard/farmer/marketplace" className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+
+                  {/* Footer */}
+                  <div className="px-4 py-3 bg-gray-50 text-center sm:text-right sm:px-6">
+                    <Link
+                      href="/dashboard/farmer/marketplace"
+                      className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                    >
                       Voir tous les produits
                     </Link>
                   </div>
@@ -1093,7 +1429,12 @@ export default function FarmerDashboard() {
       </div>
 
       {/* Modals */}
-      {selectedProject && <ProjectDetails project={selectedProject} onClose={() => setSelectedProject(null)} />}
+      {selectedProject && (
+        <ProjectDetails
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
     </div>
   );
 }
