@@ -185,7 +185,7 @@ export default function AProposPage() {
                 </div>
                 <div className="space-y-2">
                   <p className="text-gray-500">
-                    En 2020, notre équipe fondatrice a identifié les défis majeurs auxquels sont confrontés les
+                    En 2025, notre équipe fondatrice a identifié les défis majeurs auxquels sont confrontés les
                     agriculteurs sénégalais : accès limité aux marchés, difficultés de financement et manque de
                     connexion avec les acheteurs potentiels.
                   </p>
@@ -218,7 +218,7 @@ export default function AProposPage() {
               </div>
             </div>
             <motion.div
-              className="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-3"
+              className="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-4"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -233,8 +233,8 @@ export default function AProposPage() {
                   className="rounded-full object-cover"
                 />
                 <div className="text-center">
-                  <h3 className="text-xl font-bold">Mamadou Diallo</h3>
-                  <p className="text-sm text-gray-500">Fondateur & PDG</p>
+                  <h3 className="text-xl font-bold">Seydina M.R GOUDIABY</h3>
+                  {/* <p className="text-sm text-gray-500">Fondateur & PDG</p> */}
                 </div>
               </div>
               <div className="flex flex-col items-center space-y-4">
@@ -246,8 +246,8 @@ export default function AProposPage() {
                   className="rounded-full object-cover"
                 />
                 <div className="text-center">
-                  <h3 className="text-xl font-bold">Aminata Sow</h3>
-                  <p className="text-sm text-gray-500">Directrice des Opérations</p>
+                  <h3 className="text-xl font-bold">Amadou Korka DIALLO</h3>
+                  {/* <p className="text-sm text-gray-500">Directrice des Opérations</p> */}
                 </div>
               </div>
               <div className="flex flex-col items-center space-y-4">
@@ -259,8 +259,21 @@ export default function AProposPage() {
                   className="rounded-full object-cover"
                 />
                 <div className="text-center">
-                  <h3 className="text-xl font-bold">Omar Ndiaye</h3>
-                  <p className="text-sm text-gray-500">Directeur Technique</p>
+                  <h3 className="text-xl font-bold">Ababacar KOUDOUL</h3>
+                  {/* <p className="text-sm text-gray-500">Directeur Technique</p> */}
+                </div>
+              </div>
+              <div className="flex flex-col items-center space-y-4">
+                <img
+                  src="/placeholder.svg?height=200&width=200"
+                  width={200}
+                  height={200}
+                  alt="Membre de l'équipe"
+                  className="rounded-full object-cover"
+                />
+                <div className="text-center">
+                  <h3 className="text-xl font-bold">Adolph Amadou GALLAND</h3>
+                  {/* <p className="text-sm text-gray-500">Directeur Technique</p> */}
                 </div>
               </div>
             </motion.div>
