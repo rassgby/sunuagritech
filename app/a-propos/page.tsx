@@ -237,7 +237,7 @@ export default function AProposPage() {
                   {/* <p className="text-sm text-gray-500">Fondateur & PDG</p> */}
                 </div>
               </div>
-              <div className="flex flex-col items-center space-y-4">
+              <div className="flex flex-col items-center space-y-3">
                 <img
                   src="/placeholder.svg?height=200&width=200"
                   width={200}
@@ -260,10 +260,9 @@ export default function AProposPage() {
                 />
                 <div className="text-center">
                   <h3 className="text-xl font-bold">Ababacar KOUDOUL</h3>
-                  {/* <p className="text-sm text-gray-500">Directeur Technique</p> */}
                 </div>
-              </div> */}
-              <div className="flex flex-col items-center space-y-4">
+              </div>  */}
+              <div className="flex flex-col items-center space-y-3">
                 <img
                   src="/placeholder.svg?height=200&width=200"
                   width={200}
