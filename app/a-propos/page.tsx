@@ -218,13 +218,13 @@ export default function AProposPage() {
               </div>
             </div>
             <motion.div
-              className="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-4"
+              className="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-3"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <div className="flex flex-col items-center space-y-4">
+              <div className="flex flex-col items-center space-y-3">
                 <img
                   src="/placeholder.svg?height=200&width=200"
                   width={200}
@@ -250,7 +250,7 @@ export default function AProposPage() {
                   {/* <p className="text-sm text-gray-500">Directrice des Opérations</p> */}
                 </div>
               </div>
-              <div className="flex flex-col items-center space-y-4">
+              {/* <div className="flex flex-col items-center space-y-4">
                 <img
                   src="/placeholder.svg?height=200&width=200"
                   width={200}
@@ -262,7 +262,7 @@ export default function AProposPage() {
                   <h3 className="text-xl font-bold">Ababacar KOUDOUL</h3>
                   {/* <p className="text-sm text-gray-500">Directeur Technique</p> */}
                 </div>
-              </div>
+              </div> */}
               <div className="flex flex-col items-center space-y-4">
                 <img
                   src="/placeholder.svg?height=200&width=200"
@@ -272,7 +272,7 @@ export default function AProposPage() {
                   className="rounded-full object-cover"
                 />
                 <div className="text-center">
-                  <h3 className="text-xl font-bold">Adolph Amadou GALLAND</h3>
+                  <h3 className="text-xl font-bold">Mame Diarra AÏDARA</h3>
                   {/* <p className="text-sm text-gray-500">Directeur Technique</p> */}
                 </div>
               </div>
